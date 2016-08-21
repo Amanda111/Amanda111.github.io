@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+    
+    <entry>
+      <title><![CDATA[Hello World]]></title>
+      <url>http://yoursite.com/2016/08/04/hello-world/</url>
+      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[JS Modularity]]></title>
+      <url>http://yoursite.com/2016/03/17/modularity/</url>
+      <content type="html"><![CDATA[<h2 id="what-is-modularity？"><a href="#what-is-modularity？" class="headerlink" title="what is modularity？"></a>what is modularity？</h2><blockquote>
+<p>JavaScript modules are encapsulated, meaning that they keep implementation details private, and expose a public API.</p>
+</blockquote>
+<p><strong>modules should be</strong></p>
+<blockquote>
+<p><strong><em>specialized:</em></strong>  一个模块是专门解决一个问题的</p>
+<p><strong><em>independent:</em></strong>  每个模块是独立的。模块之间由API连接</p>
+<p><strong><em>decomposable:</em></strong> 可分解</p>
+<p><strong><em>recomposable:</em></strong> 可组合</p>
+<p><strong><em>substitutable:</em></strong> 可被代替</p>
+</blockquote>
+<hr>
+<h2 id="why-modularity？"><a href="#why-modularity？" class="headerlink" title="why modularity？"></a>why modularity？</h2><p><em>Code complexity grows. And modularity simplifies things!</em></p>
+<p><strong>solution to name collision</strong></p>
+<p>当一个项目大起来的时候，js的代码也越来越多，不进行闭包或者模块化就会产生大量的全局变量，而造成了命名冲突。</p>
+<p><strong>safely  make change</strong></p>
+<p>在我们写一个app的时候，整个app可能由几个部分构成，且它们之间相互联系。在我们没有使每个部分模块化的情况下，对它们进行修改的时候还要考虑到它们对整体的影响。所以我们在进行修改之前，还要go through the whole program, 真是件吃力的事情。但如果把它们都模块化，就可以在这个模块里面直接修改，而不用担心它会对整个项目产生bad effect.</p>
+<p>同样，也不用担心修改其他的部分会影响到它.</p>
+<p><strong>reuse the modules</strong></p>
+<p>模块可以被重复使用，and its API should be clean</p>
+<p><strong>make the code more readable</strong></p>
+<p>也使代码的结构性更强。</p>
+<hr>
+<h3 id="function"><a href="#function" class="headerlink" title="function"></a>function</h3><p><em>只能实现简单的封装。</em></p>
+<pre><code>var math = {
+    add: function add(a,b){
+        return a + b
+    },
+    sub: function sub(a,b){
+        return a - b
+    }
+}
+console.log(math.add(1,2));
+console.log(add(1,2));//add is undefined
+</code></pre><hr>
+<h3 id="IIFE-Immediately-invoked-Function-Expression"><a href="#IIFE-Immediately-invoked-Function-Expression" class="headerlink" title="IIFE: Immediately-invoked Function Expression"></a>IIFE: Immediately-invoked Function Expression</h3><p><em>能实现访问控制。</em></p>
+<pre><code>var module =(function(){
+    var private = &quot;private&quot;;
+    var foo = function(){
+        console.log(private);
+    }
+    return{
+        foo:foo
+    }
+})();
+console.log(module.foo());
+console.log(module.private);//undefined
+</code></pre><hr>
+<p>function和IIFE都没有依赖声明。</p>
+<p><strong>我们该怎么更好地模块化呢? </strong></p>
+<h2 id="CommonJS-amp-AMD-amp-ES6"><a href="#CommonJS-amp-AMD-amp-ES6" class="headerlink" title="CommonJS &amp; AMD &amp; ES6"></a>CommonJS &amp; AMD &amp; ES6</h2><hr>
+<h3 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h3><p><strong>多用于server上。不适合浏览器使用，不能发送异步请求。同步require</strong></p>
+<pre><code>//content of foo.js 
+//先定义一个foo模块
+var foo = function () {
+  return &apos;foo method result&apos;;
+};
+//再把foo模块暴露给其他模块
+exports.method = foo
+
+//content of bar.js
+var Foo = require(&apos;../foo&apos;);//声明依赖foo模块
+var barMethod = function () {
+  return &apos;barMethod result&apos;;
+};
+var fooMethod = function () {
+  return Foo.method();
+};
+//export 
+exports.barMethod = barMethod;
+exports.fooMethod = fooMethod;
+
+//依赖bar.js 这个模块
+var bar = require(&apos;bar&apos;);
+bar.barMethod();
+bar.fooMethod();
+</code></pre><hr>
+<h3 id="AMD-Asynchronous-Module-Definition"><a href="#AMD-Asynchronous-Module-Definition" class="headerlink" title="AMD (Asynchronous Module Definition)"></a>AMD (Asynchronous Module Definition)</h3><p>AMD里面模块是被<strong>异步加载</strong>的，加载完后就在缓存里。这能很好地<strong>适应浏览器的环境</strong>，因为这就不需要在每次加载应用时候，把所有的模块都重新加载一遍。而Commonjs，并不能做到这一点，所以说它不适合浏览器环境。</p>
+<p>因为AMD要require一个define过的模块，要立刻获取define模块的内容，所以可以看到<strong>define{}里面的内容都要用return{}包起来</strong></p>
+<p>AMD还可以加载html，css文件</p>
+<p>It should look like this</p>
+<pre><code>// content of foo.js  define(&apos;module&apos;s name&apos;,function(){}) 定义模块foo
+define(&apos;foo&apos;,function(){
+    return{
+        method: function(){
+            return &quot;foo method&quot;
+        }
+    }
+});
+
+//content of bar.js  define(&apos;module&apos;s name&apos;,[&apos;dependency&apos;],function(){}) 定义依赖模块foo的模块bar
+define(&apos;bar&apos;,[&apos;foo&apos;],function(){
+    return{
+        barMethod{
+            return &quot;bar method&quot;
+        }
+        fooMethod{
+            return foo.method();
+        }
+    }
+});
+
+//require([&apos;dependency&apos;],function(){}) 获取模块
+require([&apos;bar&apos;],function(){
+    bar.barMethod();
+      bar.fooMethod();
+})
+</code></pre><hr>
+<h3 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h3><h4 id="HERE-come-the-export-and-import-keywords"><a href="#HERE-come-the-export-and-import-keywords" class="headerlink" title="HERE come the export and import keywords!"></a>HERE come the export and import keywords!</h4><p><strong>export</strong></p>
+<pre><code>export var color = &quot;red&quot;;
+export let name = &quot;Nicholas&quot;;
+export const magicNumber = 7;
+
+export function sum(num1, num2) {
+    return num1 + num2;
+}
+
+//export later
+function multiply(num1, num2) {
+    return num1 * num2;
+}
+export multiply;
+</code></pre><p><strong>import{}</strong></p>
+<pre><code>import {identifier1,identifier2,..} from &quot;file&quot;
+
+//import everything
+import * from &quot;file&quot;
+</code></pre><h4 id="some-rules-we-need-to-know"><a href="#some-rules-we-need-to-know" class="headerlink" title="some rules we need to know"></a>some rules we need to know</h4><ul>
+<li><p>一切都”use strict”</p>
+</li>
+<li><p>只有被export了，才能在其他模块被引用。</p>
+</li>
+<li><p>module的顶级作用域不能用this这个语句</p>
+</li>
+<li><p>需要给每个function和class起名字。但default可以有</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//export  default</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span>(<span class="params">num1, num2</span>) </span>&#123;</div><div class="line">   	<span class="keyword">return</span> num1 + num2;</div><div class="line">&#125;</div><div class="line"><span class="keyword">import</span> sum <span class="keyword">from</span> <span class="string">"example"</span></div><div class="line"><span class="built_in">console</span>.log(sum(<span class="number">1</span>,<span class="number">2</span>));<span class="comment">//3</span></div></pre></td></tr></table></figure>
+<ul>
+<li>可以rename</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">num1, num2</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> num1 + num2;</div><div class="line">&#125;</div><div class="line"><span class="keyword">export</span> &#123; sum <span class="keyword">as</span> add &#125;;<span class="comment">//在export里改</span></div><div class="line"><span class="keyword">import</span> &#123; sum <span class="keyword">as</span> add &#125; <span class="keyword">from</span> <span class="string">"example"</span>; <span class="comment">//在import里改will do</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(add(<span class="number">1</span>,<span class="number">2</span>));<span class="comment">//3</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> sum)<span class="comment">//undefined</span></div></pre></td></tr></table></figure>
+<p><strong><em>References</em></strong></p>
+<p>[1]<a href="https://leanpub.com/understandinges6/read/#leanpub-auto-modules" target="_blank" rel="external">Understanding ECMAScript6-Modules</a></p>
+<p>[2]<a href="https://www.safaribooksonline.com/library/view/programming-javascript-applications/9781491950289/ch04.html" target="_blank" rel="external">Programming JavaScript Applications-Chapter 4. Modules</a></p>
+<p>[3]<a href="https://www.safaribooksonline.com/library/view/eloquent-javascript-2nd/9781457189821/ch10.html" target="_blank" rel="external">Eloquent JavaScript Chapter10 Modules</a></p>
+<p>[4]<a href="https://github.com/vasanthk/js-bits/blob/master/js/amd-commonjs-es6modules.js" target="_blank" rel="external">js-bits</a></p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[list-style-image sucks?]]></title>
+      <url>http://yoursite.com/2016/03/02/list-style-image/</url>
+      <content type="html"><![CDATA[<p>最近在学习jQuery，写一个文件夹开合的小组件。在阿里妈妈找了文件夹的svg图后，就准备把它们丢到list-style-image里。然而发现自己handle不了svg图的大小。于是，我寄希望于list-style-image有控制图大小的value。</p>
+<p>就去查了查之前一直没有用过的list-style。所以，list-style-image里有什么？</p>
+<p><strong> 先来看看MDN上关于list-style-iamge的介绍吧 </strong></p>
+<blockquote>
+<p><strong> Summary: </strong>The list-style-image property sets the image that will be used as the list item marker. </p>
+<p><strong> Values: </strong>   url/none/inherited</p>
+<p><strong> Applies to: </strong> list-item </p>
+</blockquote>
+<p>好像并没有能解决我问题的value。 <strong> 但后来，我学会通过改svg图的源码来设置图的大小。嗯，解决了svg图的问题 </strong></p>
+<p>可大家一般都怎么使用list-style-iamge呢？ <strong> 再后来，我发现大家真的都不怎么用它:) </strong></p>
+<hr>
+<h5 id="去看看阿里的官网"><a href="#去看看阿里的官网" class="headerlink" title="去看看阿里的官网"></a>去看看阿里的官网</h5><p><img src="http://d.pr/i/1f9df/alibaba.png"></p>
+<p>代码应该是这个样子的。可以看到它是在<strong> i标签里插入图片 </strong>，实现marker的效果</p>
+<p></p><p data-height="224" data-theme-id="0" data-slug-hash="LNEmMN" data-default-tab="result" data-user="amanda111" class="codepen">See the Pen <a href="http://codepen.io/amanda111/pen/LNEmMN/" target="_blank" rel="external">LNEmMN</a> by AMANDA (<a href="http://codepen.io/amanda111" target="_blank" rel="external">@amanda111</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p><p></p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+
+<hr>
+<h5 id="再看看twitter的官网"><a href="#再看看twitter的官网" class="headerlink" title="再看看twitter的官网"></a>再看看twitter的官网</h5><p><img src="http://d.pr/i/8GiH/twitter.png"></p>
+<p><strong> 用的是伪元素:before </strong></p>
+<p></p><p data-height="174" data-theme-id="0" data-slug-hash="oxgyQE" data-default-tab="result" data-user="amanda111" class="codepen">See the Pen <a href="http://codepen.io/amanda111/pen/oxgyQE/" target="_blank" rel="external">oxgyQE</a> by AMANDA (<a href="http://codepen.io/amanda111" target="_blank" rel="external">@amanda111</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p><p></p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+<hr>
+<p>更多的是<strong> 用设置background-image的方法 </strong>，设置background no-repeat，再给内容设一个合适的padding-left的值，就把background-image变到内容前面了。就有了小图标的赶脚。</p>
+<p></p><p data-height="219" data-theme-id="0" data-slug-hash="xVbWQQ" data-default-tab="html" data-user="amanda111" class="codepen">See the Pen <a href="http://codepen.io/amanda111/pen/xVbWQQ/" target="_blank" rel="external">xVbWQQ</a> by AMANDA (<a href="http://codepen.io/amanda111" target="_blank" rel="external">@amanda111</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p><p></p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+<hr>
+<p>现在用<strong> list-style-image </strong></p>
+<p></p><p data-height="154" data-theme-id="0" data-slug-hash="pyvKdz" data-default-tab="html" data-user="amanda111" class="codepen">See the Pen <a href="http://codepen.io/amanda111/pen/pyvKdz/" target="_blank" rel="external">pyvKdz</a> by AMANDA (<a href="http://codepen.io/amanda111" target="_blank" rel="external">@amanda111</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p><p></p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+<p>噢..发生了什么？用list-style-image插入小图标，发现image和内容之间有逼死强迫症的间距呀。<strong>而这个间距又是什么呢？</strong></p>
+<p>当不改变li标签样式的时，默认样式为list-style：disc。这时就可以看到实心点和内容的间距。这个间距应该是不能被改变的，是由浏览器决定的。所以，list-style-image 属性会有兼容性问题。</p>
+<p>想到要调整图片位置，就想到有 <em>list-style-position</em></p>
+<h4 id="so-what-is-list-style-position"><a href="#so-what-is-list-style-position" class="headerlink" title="so what is list-style-position?"></a>so what is list-style-position?</h4><blockquote>
+<p><strong>Initial values: </strong> outside</p>
+<p><strong> Values: </strong> inside/outside</p>
+<p><strong> Applies to: </strong> list-item</p>
+</blockquote>
+<p></p><p data-height="338" data-theme-id="0" data-slug-hash="aNzgxR" data-default-tab="html" data-user="amanda111" class="codepen">See the Pen <a href="http://codepen.io/amanda111/pen/aNzgxR/" target="_blank" rel="external">aNzgxR</a> by AMANDA (<a href="http://codepen.io/amanda111" target="_blank" rel="external">@amanda111</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p><p></p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+
+<blockquote>
+<p><strong> outside: </strong>The marker box is outside the principal block box</p>
+<p><strong> inside: </strong>The marker box is the first inline box in the principal block box, after which the element’s content flows.</p>
+</blockquote>
+<p>就只有这两个value。所以..它并不能解决marker与内容的间距问题。但是，如果list-style-position有控制间距的value。</p>
+<h3 id="Actually，list-style-image-is-just-fine"><a href="#Actually，list-style-image-is-just-fine" class="headerlink" title="Actually，list-style-image is just fine."></a>Actually，list-style-image is just fine.</h3><hr>
+<p><em>[Reference Documentation]</em></p>
+<p>[1]<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/list-style" target="_blank" rel="external">MDN list-style</a></p>
+]]></content>
+    </entry>
+    
+  
+  
+</search>
