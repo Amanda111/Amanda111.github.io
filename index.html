@@ -251,6 +251,141 @@
             
               
                 
+                <a class="post-title-link" href="/2017/04/06/Yet-Another-JavaScript-Bridge/" itemprop="url">
+                  Yet Another JavaScript Bridge
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-04-06T23:47:44+08:00" content="2017-04-06">
+              2017-04-06
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="什么是JSBridge"><a href="#什么是JSBridge" class="headerlink" title="什么是JSBridge"></a>什么是JSBridge</h1><p>在Hybrid App中，关键的部分是Native和Web的交互。JSBridge就是用来建立通信机制的。通过JSBridge，Native可以调用JS的本地方法，Web调用会被Native捕获的方法，最终实现通信。</p>
+<p>下面介绍我们封装的一个JSBridge。来看一下它的API及其用法</p>
+<hr>
+<h1 id="API及其用法"><a href="#API及其用法" class="headerlink" title="API及其用法"></a>API及其用法</h1><h2 id="一、YAJB初始化"><a href="#一、YAJB初始化" class="headerlink" title="一、YAJB初始化"></a>一、YAJB初始化</h2><p>初始化一个YAJB实例</p>
+<p><strong>用法</strong></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="keyword">install</span> yajb-js</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> YAJB = <span class="built_in">require</span>(<span class="string">'yajb-js'</span>);</div><div class="line"><span class="keyword">var</span> yajb = <span class="keyword">new</span> YAJB()</div></pre></td></tr></table></figure>
+<p><strong>API</strong></p>
+<p>初始化实际上做了三件事情。首先是初始化一个事件队列，然后判断是在Android还是iOS平台，最后保存WebView初始化传入的data。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> YAJB = function()&#123;</div><div class="line">	<span class="comment">// init evnetQueue</span></div><div class="line">	this<span class="selector-class">.eventQueue</span> = []</div><div class="line">	this<span class="selector-class">.counter</span> = <span class="number">1</span></div><div class="line">	......</div><div class="line">	<span class="comment">// get global options</span></div><div class="line">	<span class="keyword">if</span> (window.javaInterface) &#123;</div><div class="line">		options = JSON.parse(window<span class="selector-class">.javaInterface</span><span class="selector-class">.toString</span>())</div><div class="line">		this<span class="selector-class">.isAndroid</span> = true</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span> (window.YAJB_INJECT)&#123;</div><div class="line">		options = window<span class="selector-class">.YAJB_INJECT</span></div><div class="line">		this<span class="selector-class">.isiOS</span> = true</div><div class="line">	&#125;</div><div class="line">	......</div><div class="line">	<span class="comment">// store data</span></div><div class="line">	this<span class="selector-class">.platform</span> = options<span class="selector-class">.platform</span></div><div class="line">	this<span class="selector-class">.data</span> = options<span class="selector-class">.data</span></div><div class="line">	<span class="comment">// store instance</span></div><div class="line">	window<span class="selector-class">.YAJB_INSTANCE</span> = this </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="二、本地调用的方法"><a href="#二、本地调用的方法" class="headerlink" title="二、本地调用的方法"></a>二、本地调用的方法</h2><h3 id="YAJB-send"><a href="#YAJB-send" class="headerlink" title="YAJB.send()"></a>YAJB.send()</h3><p><strong>用法</strong></p>
+<p>yajb.send()中可以传入的参数有事件名和data，另外还可以定义一个函数。该函数将会在Native触发该事件之后被调用，可接收Native返回的值。</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">yajb.send(<span class="string">"$&#123;eventName&#125;"</span>, <span class="keyword">data</span>).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(val)</span></span>&#123;</div><div class="line">	console.<span class="built_in">log</span>(val)	</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><strong>API</strong></p>
+<p>yajb.send()做的事情是，通过<code>YAJB._send</code>将事件名、事件id和data发送给Native，并将<code>event + “Resolved”</code>的事件加入事件队列</p>
+<p>（YAJB默认当Native触发该事件后返回的事件的事件名为<code>event + &quot;Resolved&quot;</code>）</p>
+<p>这里利用了Promise，主要是为了用户可以通过Promise resolve function自定义执行成功的callback。当Native触发<code>event + “Resolved”</code>的事件时，就会传入参数并执行callback，<code>Promise resolve()</code>在此时也被调用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">YAJB.prototype.send = <span class="function"><span class="keyword">function</span>(<span class="params">event, data</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>)</span>&#123;</div><div class="line">		that.eventQueue.push(&#123;</div><div class="line">			event: event + <span class="string">"Resolved"</span>,</div><div class="line">			id : that.counter,</div><div class="line">			callback: <span class="function"><span class="keyword">function</span>(<span class="params">value</span>)</span>&#123;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">"resolve"</span>)</div><div class="line">				resolve(value)</div><div class="line">			&#125;</div><div class="line">		&#125;)</div><div class="line">		that._send(&#123;event:event,id:that.counter,data:<span class="built_in">JSON</span>.stringify(data)&#125;);</div><div class="line">		that.counter++</div><div class="line">	&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="YAJB-send-1"><a href="#YAJB-send-1" class="headerlink" title="YAJB._send()"></a>YAJB._send()</h3><p>上面提到了<code>YAJB._send</code>的作用是是将事件名，事件id和data发送给Native。那它具体是怎样实现的呢？</p>
+<p><strong>API</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">YAJB<span class="selector-class">.prototype</span>._send = function(option) &#123;</div><div class="line">	<span class="keyword">if</span> (this.isAndroid) &#123;</div><div class="line">		window<span class="selector-class">.location</span> = <span class="string">"hybrid://"</span> + option<span class="selector-class">.event</span> + <span class="string">':'</span> + option<span class="selector-class">.id</span> + <span class="string">'/'</span>+ option<span class="selector-class">.data</span></div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span> (this.isiOS) &#123;</div><div class="line">		<span class="comment">// window.postMessage</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，YAJB用的是URL scheme。我们约定的URL协议是<code>hybrid://${eventName}:${eventid}/${data}</code>。当我们更改URL时，Native将会捕获该动作，并解析URL。如果该URL符合约定的协议，则不进行跳转。以此实现向Native发送消息。</p>
+<h3 id="YAJB-register"><a href="#YAJB-register" class="headerlink" title="YAJB.register()"></a>YAJB.register()</h3><p><strong>用法</strong></p>
+<p>本地先注册一个事件，等待Native触发。</p>
+<p>YAJB.register()需要传入事件名和Native触发该事件之后需要执行的回调函数。该回调函数第一个参数为Native返回的data，第二个参数为返回event Resolved事件给Native的函数</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">yajb.register</span>(<span class="string">"emit"</span>, <span class="meta">function</span>(<span class="meta">data</span>,<span class="meta">fn</span>)&#123;</div><div class="line">    console.log(<span class="meta">data</span>)</div><div class="line">    var result = <span class="meta">data</span> + <span class="string">"haha"</span></div><div class="line">    <span class="meta">fn</span>(result)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><strong>API</strong></p>
+<p>这里register做的事情很简单，只是把事件推到事件队列中。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">YAJB<span class="selector-class">.prototype</span><span class="selector-class">.register</span> = function(event,fn)&#123;</div><div class="line">	this<span class="selector-class">.eventQueue</span><span class="selector-class">.push</span>(&#123;</div><div class="line">		event: event,</div><div class="line">		callback: fn</div><div class="line">	&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来会具体介绍，Native触发已注册事件时所调用的<code>_trigger</code>方法</p>
+<h2 id="三、提供给Native调用的方法"><a href="#三、提供给Native调用的方法" class="headerlink" title="三、提供给Native调用的方法"></a>三、提供给Native调用的方法</h2><h3 id="YAJB-emit"><a href="#YAJB-emit" class="headerlink" title="YAJB._emit()"></a>YAJB._emit()</h3><p><strong>用法</strong></p>
+<p>上文介绍<code>YAJB.send()</code>的时候说到，Web通过send方法向Native发送该事件及其data，Native接收并解析了之后，返回事件名为<code>${event}Resolved</code>的事件。</p>
+<p>Native通过调用本地的_emit()，返回<code>${event}Resolved</code>事件。</p>
+<p><strong>API</strong></p>
+<p>返回的option有<code>{${event}Resolved,eventid,data}</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">YAJB.prototype._emit = <span class="function"><span class="keyword">function</span>(<span class="params">option</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> opt = <span class="built_in">JSON</span>.parse(option)</div><div class="line">    <span class="keyword">this</span>.checkQueue(opt)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来到事件队列中通过id找到<code>${event}Resolve</code>事件，执行回调函数</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">YAJB<span class="selector-class">.prototype</span><span class="selector-class">.checkQueue</span> = function(option)&#123;</div><div class="line">	<span class="selector-tag">var</span> event = this<span class="selector-class">.eventQueue</span><span class="selector-class">.find</span>(function(item)&#123;</div><div class="line">		return item<span class="selector-class">.id</span> == option<span class="selector-class">.id</span></div><div class="line">	&#125;)</div><div class="line">	event.callback(option.data)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="YAJB-trigger"><a href="#YAJB-trigger" class="headerlink" title="YAJB._trigger()"></a>YAJB._trigger()</h3><p><strong>用法</strong></p>
+<p>当Native调用_trigger的同时，传入事件名，事件id和data。根据事件名从事件队列中找出之前注册过的事件，传入Native返回的data并执行callback。如果在callback中还传入了第二个参数(如：yajb.register用法示例的<code>fn</code>)，则会给Native发送<code>${event}Resolved</code>的响应事件。</p>
+<p><strong>API</strong></p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">YAJB.prototype._trigger = <span class="function"><span class="keyword">function</span><span class="params">(option)</span></span>&#123;</div><div class="line">	<span class="keyword">var</span> opt = JSON.parse(option)</div><div class="line">	<span class="keyword">var</span> event = <span class="keyword">this</span>.eventQueue.find(<span class="function"><span class="keyword">function</span><span class="params">(item)</span></span>&#123;</div><div class="line">		<span class="keyword">return</span> item.event === opt.event</div><div class="line">	&#125;)</div><div class="line">	<span class="keyword">var</span> that = <span class="keyword">this</span></div><div class="line">	event.id = opt.id</div><div class="line">	event.<span class="keyword">callback</span>(opt.data,<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span>&#123;</div><div class="line">		<span class="keyword">var</span> op = &#123;event: opt.event + <span class="string">'Resolved'</span>,data:result,id:opt.id&#125;;</div><div class="line">		that._send(op);</div><div class="line">	&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/12/10/初识Event-Emitter/" itemprop="url">
                   初识Event Emitter
                 </a>
@@ -878,7 +1013,7 @@ import * from &quot;file&quot;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -938,7 +1073,7 @@ import * from &quot;file&quot;
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

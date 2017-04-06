@@ -1,0 +1,767 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="什么是JSBridge在Hybrid App中，关键的部分是Native和Web的交互。JSBridge就是用来建立通信机制的。通过JSBridge，Native可以调用JS的本地方法，Web调用会被Native捕获的方法，最终实现通信。
+下面介绍我们封装的一个JSBridge。来看一下它的API及其用法
+
+API及其用法一、YAJB初始化初始化一个YAJB实例
+用法
+1npm install y">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Yet Another JavaScript Bridge">
+<meta property="og:url" content="http://yoursite.com/2017/04/06/Yet-Another-JavaScript-Bridge/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="什么是JSBridge在Hybrid App中，关键的部分是Native和Web的交互。JSBridge就是用来建立通信机制的。通过JSBridge，Native可以调用JS的本地方法，Web调用会被Native捕获的方法，最终实现通信。
+下面介绍我们封装的一个JSBridge。来看一下它的API及其用法
+
+API及其用法一、YAJB初始化初始化一个YAJB实例
+用法
+1npm install y">
+<meta property="og:updated_time" content="2017-04-06T15:57:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Yet Another JavaScript Bridge">
+<meta name="twitter:description" content="什么是JSBridge在Hybrid App中，关键的部分是Native和Web的交互。JSBridge就是用来建立通信机制的。通过JSBridge，Native可以调用JS的本地方法，Web调用会被Native捕获的方法，最终实现通信。
+下面介绍我们封装的一个JSBridge。来看一下它的API及其用法
+
+API及其用法一、YAJB初始化初始化一个YAJB实例
+用法
+1npm install y">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/06/Yet-Another-JavaScript-Bridge/"/>
+
+  <title> Yet Another JavaScript Bridge | Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Yet Another JavaScript Bridge
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-04-06T23:47:44+08:00" content="2017-04-06">
+              2017-04-06
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是JSBridge"><a href="#什么是JSBridge" class="headerlink" title="什么是JSBridge"></a>什么是JSBridge</h1><p>在Hybrid App中，关键的部分是Native和Web的交互。JSBridge就是用来建立通信机制的。通过JSBridge，Native可以调用JS的本地方法，Web调用会被Native捕获的方法，最终实现通信。</p>
+<p>下面介绍我们封装的一个JSBridge。来看一下它的API及其用法</p>
+<hr>
+<h1 id="API及其用法"><a href="#API及其用法" class="headerlink" title="API及其用法"></a>API及其用法</h1><h2 id="一、YAJB初始化"><a href="#一、YAJB初始化" class="headerlink" title="一、YAJB初始化"></a>一、YAJB初始化</h2><p>初始化一个YAJB实例</p>
+<p><strong>用法</strong></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="keyword">install</span> yajb-js</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> YAJB = <span class="built_in">require</span>(<span class="string">'yajb-js'</span>);</div><div class="line"><span class="keyword">var</span> yajb = <span class="keyword">new</span> YAJB()</div></pre></td></tr></table></figure>
+<p><strong>API</strong></p>
+<p>初始化实际上做了三件事情。首先是初始化一个事件队列，然后判断是在Android还是iOS平台，最后保存WebView初始化传入的data。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> YAJB = function()&#123;</div><div class="line">	<span class="comment">// init evnetQueue</span></div><div class="line">	this<span class="selector-class">.eventQueue</span> = []</div><div class="line">	this<span class="selector-class">.counter</span> = <span class="number">1</span></div><div class="line">	......</div><div class="line">	<span class="comment">// get global options</span></div><div class="line">	<span class="keyword">if</span> (window.javaInterface) &#123;</div><div class="line">		options = JSON.parse(window<span class="selector-class">.javaInterface</span><span class="selector-class">.toString</span>())</div><div class="line">		this<span class="selector-class">.isAndroid</span> = true</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span> (window.YAJB_INJECT)&#123;</div><div class="line">		options = window<span class="selector-class">.YAJB_INJECT</span></div><div class="line">		this<span class="selector-class">.isiOS</span> = true</div><div class="line">	&#125;</div><div class="line">	......</div><div class="line">	<span class="comment">// store data</span></div><div class="line">	this<span class="selector-class">.platform</span> = options<span class="selector-class">.platform</span></div><div class="line">	this<span class="selector-class">.data</span> = options<span class="selector-class">.data</span></div><div class="line">	<span class="comment">// store instance</span></div><div class="line">	window<span class="selector-class">.YAJB_INSTANCE</span> = this </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="二、本地调用的方法"><a href="#二、本地调用的方法" class="headerlink" title="二、本地调用的方法"></a>二、本地调用的方法</h2><h3 id="YAJB-send"><a href="#YAJB-send" class="headerlink" title="YAJB.send()"></a>YAJB.send()</h3><p><strong>用法</strong></p>
+<p>yajb.send()中可以传入的参数有事件名和data，另外还可以定义一个函数。该函数将会在Native触发该事件之后被调用，可接收Native返回的值。</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">yajb.send(<span class="string">"$&#123;eventName&#125;"</span>, <span class="keyword">data</span>).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(val)</span></span>&#123;</div><div class="line">	console.<span class="built_in">log</span>(val)	</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><strong>API</strong></p>
+<p>yajb.send()做的事情是，通过<code>YAJB._send</code>将事件名、事件id和data发送给Native，并将<code>event + “Resolved”</code>的事件加入事件队列</p>
+<p>（YAJB默认当Native触发该事件后返回的事件的事件名为<code>event + &quot;Resolved&quot;</code>）</p>
+<p>这里利用了Promise，主要是为了用户可以通过Promise resolve function自定义执行成功的callback。当Native触发<code>event + “Resolved”</code>的事件时，就会传入参数并执行callback，<code>Promise resolve()</code>在此时也被调用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">YAJB.prototype.send = <span class="function"><span class="keyword">function</span>(<span class="params">event, data</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>)</span>&#123;</div><div class="line">		that.eventQueue.push(&#123;</div><div class="line">			event: event + <span class="string">"Resolved"</span>,</div><div class="line">			id : that.counter,</div><div class="line">			callback: <span class="function"><span class="keyword">function</span>(<span class="params">value</span>)</span>&#123;</div><div class="line">				<span class="built_in">console</span>.log(<span class="string">"resolve"</span>)</div><div class="line">				resolve(value)</div><div class="line">			&#125;</div><div class="line">		&#125;)</div><div class="line">		that._send(&#123;event:event,id:that.counter,data:<span class="built_in">JSON</span>.stringify(data)&#125;);</div><div class="line">		that.counter++</div><div class="line">	&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="YAJB-send-1"><a href="#YAJB-send-1" class="headerlink" title="YAJB._send()"></a>YAJB._send()</h3><p>上面提到了<code>YAJB._send</code>的作用是是将事件名，事件id和data发送给Native。那它具体是怎样实现的呢？</p>
+<p><strong>API</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">YAJB<span class="selector-class">.prototype</span>._send = function(option) &#123;</div><div class="line">	<span class="keyword">if</span> (this.isAndroid) &#123;</div><div class="line">		window<span class="selector-class">.location</span> = <span class="string">"hybrid://"</span> + option<span class="selector-class">.event</span> + <span class="string">':'</span> + option<span class="selector-class">.id</span> + <span class="string">'/'</span>+ option<span class="selector-class">.data</span></div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span> (this.isiOS) &#123;</div><div class="line">		<span class="comment">// window.postMessage</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，YAJB用的是URL scheme。我们约定的URL协议是<code>hybrid://${eventName}:${eventid}/${data}</code>。当我们更改URL时，Native将会捕获该动作，并解析URL。如果该URL符合约定的协议，则不进行跳转。以此实现向Native发送消息。</p>
+<h3 id="YAJB-register"><a href="#YAJB-register" class="headerlink" title="YAJB.register()"></a>YAJB.register()</h3><p><strong>用法</strong></p>
+<p>本地先注册一个事件，等待Native触发。</p>
+<p>YAJB.register()需要传入事件名和Native触发该事件之后需要执行的回调函数。该回调函数第一个参数为Native返回的data，第二个参数为返回event Resolved事件给Native的函数</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">yajb.register</span>(<span class="string">"emit"</span>, <span class="meta">function</span>(<span class="meta">data</span>,<span class="meta">fn</span>)&#123;</div><div class="line">    console.log(<span class="meta">data</span>)</div><div class="line">    var result = <span class="meta">data</span> + <span class="string">"haha"</span></div><div class="line">    <span class="meta">fn</span>(result)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><strong>API</strong></p>
+<p>这里register做的事情很简单，只是把事件推到事件队列中。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">YAJB<span class="selector-class">.prototype</span><span class="selector-class">.register</span> = function(event,fn)&#123;</div><div class="line">	this<span class="selector-class">.eventQueue</span><span class="selector-class">.push</span>(&#123;</div><div class="line">		event: event,</div><div class="line">		callback: fn</div><div class="line">	&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来会具体介绍，Native触发已注册事件时所调用的<code>_trigger</code>方法</p>
+<h2 id="三、提供给Native调用的方法"><a href="#三、提供给Native调用的方法" class="headerlink" title="三、提供给Native调用的方法"></a>三、提供给Native调用的方法</h2><h3 id="YAJB-emit"><a href="#YAJB-emit" class="headerlink" title="YAJB._emit()"></a>YAJB._emit()</h3><p><strong>用法</strong></p>
+<p>上文介绍<code>YAJB.send()</code>的时候说到，Web通过send方法向Native发送该事件及其data，Native接收并解析了之后，返回事件名为<code>${event}Resolved</code>的事件。</p>
+<p>Native通过调用本地的_emit()，返回<code>${event}Resolved</code>事件。</p>
+<p><strong>API</strong></p>
+<p>返回的option有<code>{${event}Resolved,eventid,data}</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">YAJB.prototype._emit = <span class="function"><span class="keyword">function</span>(<span class="params">option</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> opt = <span class="built_in">JSON</span>.parse(option)</div><div class="line">    <span class="keyword">this</span>.checkQueue(opt)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来到事件队列中通过id找到<code>${event}Resolve</code>事件，执行回调函数</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">YAJB<span class="selector-class">.prototype</span><span class="selector-class">.checkQueue</span> = function(option)&#123;</div><div class="line">	<span class="selector-tag">var</span> event = this<span class="selector-class">.eventQueue</span><span class="selector-class">.find</span>(function(item)&#123;</div><div class="line">		return item<span class="selector-class">.id</span> == option<span class="selector-class">.id</span></div><div class="line">	&#125;)</div><div class="line">	event.callback(option.data)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="YAJB-trigger"><a href="#YAJB-trigger" class="headerlink" title="YAJB._trigger()"></a>YAJB._trigger()</h3><p><strong>用法</strong></p>
+<p>当Native调用_trigger的同时，传入事件名，事件id和data。根据事件名从事件队列中找出之前注册过的事件，传入Native返回的data并执行callback。如果在callback中还传入了第二个参数(如：yajb.register用法示例的<code>fn</code>)，则会给Native发送<code>${event}Resolved</code>的响应事件。</p>
+<p><strong>API</strong></p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">YAJB.prototype._trigger = <span class="function"><span class="keyword">function</span><span class="params">(option)</span></span>&#123;</div><div class="line">	<span class="keyword">var</span> opt = JSON.parse(option)</div><div class="line">	<span class="keyword">var</span> event = <span class="keyword">this</span>.eventQueue.find(<span class="function"><span class="keyword">function</span><span class="params">(item)</span></span>&#123;</div><div class="line">		<span class="keyword">return</span> item.event === opt.event</div><div class="line">	&#125;)</div><div class="line">	<span class="keyword">var</span> that = <span class="keyword">this</span></div><div class="line">	event.id = opt.id</div><div class="line">	event.<span class="keyword">callback</span>(opt.data,<span class="function"><span class="keyword">function</span><span class="params">(result)</span></span>&#123;</div><div class="line">		<span class="keyword">var</span> op = &#123;event: opt.event + <span class="string">'Resolved'</span>,data:result,id:opt.id&#125;;</div><div class="line">		that._send(op);</div><div class="line">	&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/10/初识Event-Emitter/" rel="next" title="初识Event Emitter">
+                <i class="fa fa-chevron-left"></i> 初识Event Emitter
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/snoopy.jpg"
+               alt="Amanda" />
+          <p class="site-author-name" itemprop="name">Amanda</p>
+          <p class="site-description motion-element" itemprop="description">practice makes perfect</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Amanda111" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/Amanda111____" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是JSBridge"><span class="nav-number">1.</span> <span class="nav-text">什么是JSBridge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#API及其用法"><span class="nav-number">2.</span> <span class="nav-text">API及其用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、YAJB初始化"><span class="nav-number">2.1.</span> <span class="nav-text">一、YAJB初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、本地调用的方法"><span class="nav-number">2.2.</span> <span class="nav-text">二、本地调用的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#YAJB-send"><span class="nav-number">2.2.1.</span> <span class="nav-text">YAJB.send()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YAJB-send-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">YAJB._send()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YAJB-register"><span class="nav-number">2.2.3.</span> <span class="nav-text">YAJB.register()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、提供给Native调用的方法"><span class="nav-number">2.3.</span> <span class="nav-text">三、提供给Native调用的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#YAJB-emit"><span class="nav-number">2.3.1.</span> <span class="nav-text">YAJB._emit()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YAJB-trigger"><span class="nav-number">2.3.2.</span> <span class="nav-text">YAJB._trigger()</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Amanda</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
