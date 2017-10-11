@@ -100,7 +100,7 @@ API及其用法一、YAJB初始化初始化一个YAJB实例
 API及其用法一、YAJB初始化初始化一个YAJB实例
 用法
 1npm install y">
-<meta property="og:updated_time" content="2017-04-06T15:57:01.000Z">
+<meta property="og:updated_time" content="2017-04-06T16:00:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Yet Another JavaScript Bridge">
 <meta name="twitter:description" content="什么是JSBridge在Hybrid App中，关键的部分是Native和Web的交互。JSBridge就是用来建立通信机制的。通过JSBridge，Native可以调用JS的本地方法，Web调用会被Native捕获的方法，最终实现通信。
@@ -313,7 +313,7 @@ API及其用法一、YAJB初始化初始化一个YAJB实例
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> YAJB = <span class="built_in">require</span>(<span class="string">'yajb-js'</span>);</div><div class="line"><span class="keyword">var</span> yajb = <span class="keyword">new</span> YAJB()</div></pre></td></tr></table></figure>
 <p><strong>API</strong></p>
 <p>初始化实际上做了三件事情。首先是初始化一个事件队列，然后判断是在Android还是iOS平台，最后保存WebView初始化传入的data。</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> YAJB = function()&#123;</div><div class="line">	<span class="comment">// init evnetQueue</span></div><div class="line">	this<span class="selector-class">.eventQueue</span> = []</div><div class="line">	this<span class="selector-class">.counter</span> = <span class="number">1</span></div><div class="line">	......</div><div class="line">	<span class="comment">// get global options</span></div><div class="line">	<span class="keyword">if</span> (window.javaInterface) &#123;</div><div class="line">		options = JSON.parse(window<span class="selector-class">.javaInterface</span><span class="selector-class">.toString</span>())</div><div class="line">		this<span class="selector-class">.isAndroid</span> = true</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span> (window.YAJB_INJECT)&#123;</div><div class="line">		options = window<span class="selector-class">.YAJB_INJECT</span></div><div class="line">		this<span class="selector-class">.isiOS</span> = true</div><div class="line">	&#125;</div><div class="line">	......</div><div class="line">	<span class="comment">// store data</span></div><div class="line">	this<span class="selector-class">.platform</span> = options<span class="selector-class">.platform</span></div><div class="line">	this<span class="selector-class">.data</span> = options<span class="selector-class">.data</span></div><div class="line">	<span class="comment">// store instance</span></div><div class="line">	window<span class="selector-class">.YAJB_INSTANCE</span> = this </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> YAJB = function()&#123;</div><div class="line">    <span class="comment">// init evnetQueue</span></div><div class="line">	this<span class="selector-class">.eventQueue</span> = []</div><div class="line">	this<span class="selector-class">.counter</span> = <span class="number">1</span></div><div class="line">	......</div><div class="line">	<span class="comment">// get global options</span></div><div class="line">	<span class="keyword">if</span> (window.javaInterface) &#123;</div><div class="line">        options = JSON.parse(window<span class="selector-class">.javaInterface</span><span class="selector-class">.toString</span>())</div><div class="line">        this<span class="selector-class">.isAndroid</span> = true</div><div class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span> (window.YAJB_INJECT)&#123;</div><div class="line">        options = window<span class="selector-class">.YAJB_INJECT</span></div><div class="line">        this<span class="selector-class">.isiOS</span> = true</div><div class="line">    &#125;</div><div class="line">    ......</div><div class="line">	<span class="comment">// store data</span></div><div class="line">	this<span class="selector-class">.platform</span> = options<span class="selector-class">.platform</span></div><div class="line">	this<span class="selector-class">.data</span> = options<span class="selector-class">.data</span></div><div class="line">	<span class="comment">// store instance</span></div><div class="line">	window<span class="selector-class">.YAJB_INSTANCE</span> = this </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="二、本地调用的方法"><a href="#二、本地调用的方法" class="headerlink" title="二、本地调用的方法"></a>二、本地调用的方法</h2><h3 id="YAJB-send"><a href="#YAJB-send" class="headerlink" title="YAJB.send()"></a>YAJB.send()</h3><p><strong>用法</strong></p>
 <p>yajb.send()中可以传入的参数有事件名和data，另外还可以定义一个函数。该函数将会在Native触发该事件之后被调用，可接收Native返回的值。</p>
 <figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">yajb.send(<span class="string">"$&#123;eventName&#125;"</span>, <span class="keyword">data</span>).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span><span class="params">(val)</span></span>&#123;</div><div class="line">	console.<span class="built_in">log</span>(val)	</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
@@ -378,6 +378,10 @@ API及其用法一、YAJB初始化初始化一个YAJB实例
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/11/Vue-Table/" rel="prev" title="Vue2.x Table 组件">
+                Vue2.x Table 组件 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -445,7 +449,7 @@ API及其用法一、YAJB初始化初始化一个YAJB实例
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
