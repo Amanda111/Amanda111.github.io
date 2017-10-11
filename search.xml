@@ -28,6 +28,7 @@
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">m-table-col</span></span></div><div class="line">	<span class="attr">label</span>=<span class="string">"操作"</span></div><div class="line">	<span class="attr">prop</span>=<span class="string">"active"</span></div><div class="line">	<span class="attr">width</span>=<span class="string">"10%"</span>&gt;</div><div class="line">	<span class="tag">&lt;<span class="name">m-button</span>&gt;</span><span class="tag">&lt;/<span class="name">m-button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">m-table-col</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>然而VNode是唯一的，而且即使将VNode深复制，也不可能动态改变VNode，比如把每一行的id传进该VNode。</p>
 <p>最后的解决方法是<code>$scopedSlots</code>。scopedSlots被编译后，生成的是一个函数，该函数可以动态传入scope并生成VNode，问题便迎刃而解了。</p>
+<h4 id="Links"><a href="#Links" class="headerlink" title="Links:"></a>Links:</h4><p><a href="http://zxc0328.github.io/2017/09/19/table-component-slot-passing/" target="_blank" rel="external">Table组件中slot内容的跨级传递</a></p>
 ]]></content>
     </entry>
     
