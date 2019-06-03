@@ -4,6 +4,14 @@
   
     
     <entry>
+      <title><![CDATA[Test Travis]]></title>
+      <url>http://yoursite.com/2019/06/03/test-travis/</url>
+      <content type="html"><![CDATA[<h1 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h1>]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Vue2.x Table 组件]]></title>
       <url>http://yoursite.com/2017/10/11/Vue-Table/</url>
       <content type="html"><![CDATA[<p>Vue2.x Table 组件从0到1。</p>
