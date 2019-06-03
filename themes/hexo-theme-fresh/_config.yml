@@ -1,0 +1,38 @@
+# basic
+title:  hexo-theme-fresh
+subtitle: Just Do Heck!!!
+author: StephenLiu
+description:
+keyword: 
+favicon: favicon.ico
+
+# Header
+menu:
+  ## If your site is put in a subdirectory, set Home as '/child/'
+  Home: /
+  Archives: /archives
+
+# avatar: img/avatar.png
+# banner: img/banner.png
+avatar: img/avatar.png
+banner: img/banner.png
+
+# social
+social:
+  twitter:
+  weibo: 
+  github: https://github.com/stephenLYao
+
+
+duoshuo: duoshuo_shortname
+disqus: disqus _shortname
+google_analytics: 
+google_adsense_page_level_ads: #Google Adsense Page Level Ads Code
+
+
+excerpt_num: 120
+# hexo-renderer-sass 
+node_sass:
+  outputStyle: nested
+  precision: 5
+  sourceComments: false

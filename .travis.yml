@@ -1,0 +1,19 @@
+language: node_js
+node_js: stable
+before_install: 
+    - export TZ='Asia/Shanghai'
+    - npm install hexo-cli -g
+    - chmod +x ./publish-to-gh-pages.sh
+install:
+    - npm install
+script:
+    - hexo clean
+    - hexo g
+after_script:
+    - ./publish-to-gh-pages.sh
+branches:
+    only:
+        - source
+env:
+    global:
+        - GH_REF: github.com/Amanda111/Amanda111.github.io.git
