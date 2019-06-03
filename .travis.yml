@@ -5,7 +5,7 @@ before_install:
     - npm install hexo-cli -g
     - chmod +x ./publish-to-gh-pages.sh
 install:
-    - npm install
+    - LIBSASS_EXT="no" npm install
 script:
     - hexo clean
     - hexo g
